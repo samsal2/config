@@ -18,9 +18,11 @@ export VK_LAYER_PATH="$VULKAN_SDK/share/vulkan/explicit_layer.d"
 
 # vscode
 alias code="/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code"
-alias cmake="/Applications/CMake.app/Contents/bin/cmake"
-alias ctest="/Applications/CMake.app/Contents/bin/ctest"
-alias cpack="/Applications/CMake.app/Contents/bin/cpack"
-alias ninja="$HOME/Code/Config/Bin/Darwin/ninja"
+
+# cmake
+export PATH="/Applications/CMake.app/Contents/bin/:$PATH"
+
+# ninja
+export PATH="$HOME/Code/Config/Bin/Darwin/ninja/:$PATH"
 
 

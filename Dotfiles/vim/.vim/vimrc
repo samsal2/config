@@ -1,7 +1,6 @@
 set nocompatible
 
 syntax on
-colorscheme solarized
 
 set background=dark
 set tabstop=2
@@ -30,9 +29,3 @@ vnoremap <Up> <Nop>
 vnoremap <Down> <Nop>
 vnoremap <Left> <Nop>
 vnoremap <Right> <Nop>
-
-" disable netrw history
-let g:netrw_dirhistmax=0
-
-" autocmd Filetype Rust setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
-" autocmd Filetype Python setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
