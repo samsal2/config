@@ -34,8 +34,5 @@ vnoremap <Right> <Nop>
 " disable netrw history
 let g:netrw_dirhistmax=0
 
-" fzf
-let g:fzf_preview_window = ['up:50%']
-
 " autocmd Filetype Rust setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
 " autocmd Filetype Python setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
