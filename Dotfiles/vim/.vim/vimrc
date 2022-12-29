@@ -1,0 +1,41 @@
+set nocompatible
+
+syntax on
+colorscheme solarized
+
+set background=dark
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
+set expandtab
+set incsearch
+set viminfo=""
+set ruler
+set nowrap
+set noswapfile
+set encoding=utf-8 " displayed
+set fileencoding=utf-8 " written
+
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+noremap <Left> <Nop>
+noremap <Right> <Nop>
+
+inoremap <Up> <Nop>
+inoremap <Down> <Nop>
+inoremap <Left> <Nop>
+inoremap <Right> <Nop>
+
+vnoremap <Up> <Nop>
+vnoremap <Down> <Nop>
+vnoremap <Left> <Nop>
+vnoremap <Right> <Nop>
+
+" disable netrw history
+let g:netrw_dirhistmax=0
+
+" fzf
+let g:fzf_preview_window = ['up:50%']
+
+" autocmd Filetype Rust setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
+" autocmd Filetype Python setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
