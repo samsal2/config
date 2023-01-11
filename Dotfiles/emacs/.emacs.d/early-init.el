@@ -44,12 +44,12 @@
 (setq ring-bell-function 'ignore)
 
 ;; initial state
-(add-to-list 'initial-frame-alist `(width . 79))
-(add-to-list 'initial-frame-alist `(height . 49))
-(add-to-list 'initial-frame-alist `(internal-border-width . 3))
+;; (add-to-list 'initial-frame-alist `(width . 79))
+;; (add-to-list 'initial-frame-alist `(height . 49))
+;; (add-to-list 'initial-frame-alist `(internal-border-width . 3))
 
 ;; font
-(add-to-list 'initial-frame-alist `(font . "Cascadia Mono-14"))
+(add-to-list 'initial-frame-alist `(font . "Jetbrains Mono NL-14"))
 
 ;; only display file
 (setq frame-title-format "%b")
@@ -63,26 +63,5 @@
 ;; type y or n instead of yes or no
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; disable package at startup
+;; required for bootstrap straight.el
 (setq package-enable-at-startup nil)
-
-;; bootstrap straight
-(setq straight-use-package-by-default t)
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" 
-                         user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-  "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-
-(straight-use-package 'use-package)
-
-
-

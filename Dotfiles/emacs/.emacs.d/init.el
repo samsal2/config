@@ -2,13 +2,30 @@
 ;;; Commentary:
 ;;; Code:
 
-(defconst IS-TERMINAL (eq window-system nil))
+;; bootstrap straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 6))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+(straight-use-package 'use-package)
 
-;; (when (and IS-MAC (not IS-TERMINAL))
-;;   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-;;   (add-to-list 'default-frame-alist '(ns-appearance . dark))
-;;   (setq ns-use-proxy-icon nil)
-;;   (setq frame-title-format nil))
+(use-package exec-path-from-shell
+  :straight t
+  :config
+  (exec-path-from-shell-initialize))
+
+(use-package emacs
+  :init
+  (defconst IS-TERMINAL (eq window-system nil))
+  (when (fboundp 'electric-indent-mode) (electric-indent-mode -1)))
 
 ;; used to remove anoying modes from the status bar
 (use-package diminish
@@ -17,34 +34,6 @@
 ;; too lazy to configure files
 (use-package no-littering
   :straight t)
-
-;; manage keybindings
-(use-package general
-  :straight t
-  :config 
-  (general-evil-setup)
-  (general-auto-unbind-keys)
-  (general-create-definer smsl/leader :prefix "`"))
-
-;; for shell utilities
-(use-package exec-path-from-shell
-  :straight t
-  :config
-  (exec-path-from-shell-initialize))
-
-;; flymake config
-(defvar smsl/flymake-map (make-sparse-keymap)
-  "flymake map")
-
-(smsl/leader :states 'normal :jump t
-  "f" '(:keymap smsl/flymake-map :which-key "flymake"))
-
-;; todo look into general again and why I need an sparse map
-(use-package flymake
-  :straight t
-  :general
-  (:keymaps 'smsl/flymake-map
-     "m" '(flymake-show-buffer-diagnostics :whick-key "diagnostics")))
 
 ;; evil
 (use-package evil
@@ -82,7 +71,7 @@
 (use-package doom-themes
   :straight t
   :if t
-  :init (load-theme 'doom-gruvbox t)
+  :init (load-theme 'doom-one t)
   :config (doom-themes-org-config))
 
 ;; nice contrants between buffers
@@ -91,171 +80,10 @@
   :config 
   (solaire-global-mode +1))
 
-
-(use-package spaceline
-  :straight t
-  :config 
-  (spaceline-spacemacs-theme)
-  (spaceline-toggle-evil-state-off))
-
 ;; magit
 (use-package magit
   :straight t
-  :defer t
-  :custom (magit-define-global-key-bindings nil)
-  :general
-
-  (:keymaps 'transient-base-map 
-     "<escape>" 'transient-quit-one)
-
-  (general-unbind :states 'normal :keymaps 'magit-status-mode-map 
-    "<escape>")
-
-  (smsl/leader :states 'normal 
-    "g" '(magit-status :which-key "git")))
-
-;; projectile setup
-(use-package projectile
-  :straight t
-  :diminish projectile-mode
-  :custom (projectile-project-search-path '("~/code/"))
-  :init (projectile-mode +1)
-  :general 
-  (smsl/leader :states 'normal 
-    "p" '(:keymap projectile-command-map 
-          :package projectile 
-          :which-key "projectile"))
- 
-  ([remap evil-jump-to-tag] #'projectile-find-tag
-   [remap find-tag]         #'projectile-find-tag)
-
-  (general-unbind :keymaps 'projectile-command-map 
-    "ESC"))
-
-;; treemacs setup
-(use-package treemacs
-  :straight t
-)
-
-(use-package vertico
-  :straight t
-  :diminish vertico-mode
-  :general
-  :init (vertico-mode))
-
-(use-package marginalia
-  :straight t
-  :diminish marginalia-mode
-  :init (marginalia-mode)
-  :config
-  (setq marginalia-command-categories
-          (append '((projectile-find-file . project-file)
-                    (projectile-find-dir . project-file)
-                    (projectile-switch-project . file))
-                  marginalia-command-categories)))
-
-(use-package consult
-  :straight t
-  :diminish consult-mode
-  :custom
-  (completion-in-region-function #'consult-completion-in-region)
-  (consult-project-root-function #'projectile-project-root)
-  :general
-
-  ([remap projectile-grep]               #'consult-git-grep
-   [remap apropos]                       #'consult-apropos
-   [remap bookmark-jump]                 #'consult-bookmark
-   [remap evil-show-marks]               #'consult-mark
-   [remap goto-line]                     #'consult-goto-line
-   [remap imenu]                         #'consult-imenu
-   [remap locate]                        #'consult-locate
-   [remap load-theme]                    #'consult-theme
-   [remap man]                           #'consult-man
-   [remap recentf-open-files]            #'consult-recent-file
-   [remap switch-to-buffer]              #'consult-buffer
-   [remap switch-to-buffer-other-window] #'consult-buffer-other-window
-   [remap switch-to-buffer-other-frame]  #'consult-buffer-other-frame
-   [remap yank-pop]                      #'consult-yank-pop))
-
-(use-package orderless
-  :straight t
-  :custom
-
-  (orderless-matching-styles 
-    '(orderless-literal
-      orderless-flex
-      orderless-regexp))
-
-  (completion-styles '(orderless)))
-
-;; corfu doesn't let me remap M-n and M-p to C-n and C-p
-(use-package company
-  :straight t
-  :diminish company-mode
-  :hook (prog-mode . company-mode)
-  :general
-  (:keymaps 'company-active-map
-   "C-w" 'nil
-   "C-n" 'company-select-next
-   "C-p" 'company-select-previous
-   "C-u" 'company-previous-page
-   "C-d" 'company-next-page)
-
-  (:keymaps 'company-search-map
-   "C-w" 'nil
-   "C-n" 'company-select-next-or-abort
-   "C-p" 'company-select-previous-or-abort
-   "C-u" 'company-previous-page-or-abort
-   "C-d" 'company-next-page-or-abort
-   "ESC" 'company-search-abort))
-
-(use-package which-key
-  :straight t
-  :diminish which-key-mode
-  :custom (which-key-idle-delay 0.5)
-  :config (which-key-mode))
-
-;; lsp
-(defvar smsl/lsp-map (make-sparse-keymap)
-  "lsp map")
-
-(smsl/leader :states 'normal :jump t
-  "l" '(:keymap smsl/lsp-map :which-key "lsp"))
-
-(use-package eglot
-  :straight t
-  :general
-  (:keymaps 'smsl/lsp-map
-    "r" '(eglot-rename :which-key "rename"))
-
-  (:keymaps 'smsl/lsp-map :prefix "w"
-    ""  '(nil :which-key "workspace")
-    "r" '(eglot-reconnect :which-key "reconnect")
-    "s" '(eglot-start :which-key "restart"))
-
-  (:keymaps 'smsl/lsp-map :prefix "g"
-    ""  '(nil :which-key "go")
-    "d" '(eglot-find-declaration :which-key "definitions")
-    "r" '(xref-find-references :which-key "references")
-    "i" '(eglot-find-implementation :which-key "implementation"))
-
-  (:keymaps 'smsl/lsp-map :prefix "="
-    ""  '(nil :which-key "format")
-    "b" '(eglot-format-buffer :which-key "buffer"))
-
-  :config 
-  (add-to-list 'eglot-server-programs '(c-mode . ("clangd")))
-  (add-to-list 'eglot-server-programs '(c++-mode . ("clangd")))
-  (add-to-list 'eglot-server-programs '(python-mode . ("pyls"))))
-
-(use-package org
-  :straight t
-  :config
-  (org-babel-do-load-languages
-    'org-babel-load-languages '((python . t) (C . t)))
-
-  (if (eq system-type 'darwin)
-    (setq org-babel-python-command "python3")))
+  :defer t)
 
 ;; disable accidental mouse interactions
 (use-package disable-mouse
@@ -263,49 +91,162 @@
   :diminish disable-mouse-global-mode
   :config (global-disable-mouse-mode))
 
-;; C, C++
-(use-package cc-mode
-  :straight nil
-  :hook 
-  (c-mode . eglot-ensure)
-  (c++-mode . eglot-ensure)
-  ;; behave like vim when jumping with w
-  (c-mode . (lambda () (modify-syntax-entry ?_ "w"))) 
-  (c++-mode . (lambda () (modify-syntax-entry ?_ "w"))))
+(use-package projectile
+  :straight t
+  :diminish projectile-mode
+  :custom (projectile-project-search-path '("~/Code/"))
+  :init (projectile-mode +1))
 
+(use-package vertico
+  :straight t
+  :diminish vertico-mode
+  :init (vertico-mode))
 
-;; Python
-(defun smsl/python-mode-activate-hook ()
-  "Handles python mode by loading the env dir and then lsp-deferred."
-  (let* ((d (projectile-ensure-project (projectile-project-root)))
-         (e (concat d "env")))
-    (pyvenv-activate e)
-    (eglot-ensure)))
+;; Optionally use the `orderless' completion style.
+(use-package orderless
+  :straight t
+  :init
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
+  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
 
-(use-package python
-  :straight nil
-  :custom (python-shell-interpreter "python3")
-  :hook 
-  (python-mode . smsl/python-mode-activate-hook)
-  (python-mode . (lambda () (modify-syntax-entry ?_ "w"))))
-  
-(use-package pyvenv
-  :straight (pyvenv
-              :type git
-              :host github
-              :repo "jorgenschaefer/pyvenv")
-  :diminish pyvenv-mode)
+(use-package marginalia
+  :straight t
+  ;; Either bind `marginalia-cycle' globally or only in the minibuffer
+  :bind (("M-A" . marginalia-cycle)
+         :map minibuffer-local-map
+         ("M-A" . marginalia-cycle))
 
-(use-package glsl-mode
-  :straight t)
+  ;; The :init configuration is always executed (Not lazy!)
+  :init
 
-(use-package cmake-mode
-  :straight t)
+  ;; Must be in the :init section of use-package such that the mode gets
+  ;; enabled right away. Note that this forces loading the package.
+  (marginalia-mode))
 
-;; https://emacs.stackexchange.com/questions/5939/how-to-disable-auto-indentation-of-new-lines
-(when (fboundp 'electric-indent-mode) (electric-indent-mode -1))
+(use-package consult
+  :straight t
+  ;; Replace bindings. Lazily loaded due by `use-package'.
+  :bind ;; C-c bindings (mode-specific-map)
+  (("C-c h" . consult-history)
+   ("C-c m" . consult-mode-command)
+   ("C-c k" . consult-kmacro)
+   ;; C-x bindings (ctl-x-map)
+   ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+   ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+   ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+   ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+   ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
+   ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+   ;; Custom M-# bindings for fast register access
+   ("M-#" . consult-register-load)
+   ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+   ("C-M-#" . consult-register)
+   ;; Other custom bindings
+   ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+   ;; M-g bindings (goto-map)
+   ("M-g e" . consult-compile-error)
+   ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
+   ("M-g g" . consult-goto-line)             ;; orig. goto-line
+   ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+   ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+   ("M-g m" . consult-mark)
+   ("M-g k" . consult-global-mark)
+   ("M-g i" . consult-imenu)
+   ("M-g I" . consult-imenu-multi)
+   ;; M-s bindings (search-map)
+   ("M-s d" . consult-find)
+   ("M-s D" . consult-locate)
+   ("M-s g" . consult-grep)
+   ("M-s G" . consult-git-grep)
+   ("M-s r" . consult-ripgrep)
+   ("M-s l" . consult-line)
+   ("M-s L" . consult-line-multi)
+   ("M-s k" . consult-keep-lines)
+   ("M-s u" . consult-focus-lines)
+    ;; Isearch integration
+    ("M-s e" . consult-isearch-history)
+    :map isearch-mode-map
+    ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
+    ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
+    ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
+    ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+    ;; Minibuffer history
+    :map minibuffer-local-map
+    ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+    ("M-r" . consult-history))                ;; orig. previous-matching-history-element
 
+  ;; Enable automatic preview at point in the *Completions* buffer. This is
+  ;; relevant when you use the default completion UI.
+  :hook (completion-list-mode . consult-preview-at-point-mode)
 
+  ;; The :init configuration is always executed (Not lazy)
+  :init
+
+  ;; Optionally configure the register formatting. This improves the register
+  ;; preview for `consult-register', `consult-register-load',
+  ;; `consult-register-store' and the Emacs built-ins.
+  (setq register-preview-delay 0.5
+        register-preview-function #'consult-register-format)
+
+  ;; Optionally tweak the register preview window.
+  ;; This adds thin lines, sorting and hides the mode line of the window.
+  (advice-add #'register-preview :override #'consult-register-window)
+
+  ;; Use Consult to select xref locations with preview
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+
+  ;; Configure other variables and modes in the :config section,
+  ;; after lazily loading the package.
+  :config
+
+  ;; Optionally configure preview. The default value
+  ;; is 'any, such that any key triggers the preview.
+  ;; (setq consult-preview-key 'any)
+  ;; (setq consult-preview-key (kbd "M-."))
+  ;; (setq consult-preview-key (list (kbd "<S-down>") (kbd "<S-up>")))
+  ;; For some commands and buffer sources it is useful to configure the
+  ;; :preview-key on a per-command basis using the `consult-customize' macro.
+  (consult-customize
+   consult-theme :preview-key '(:debounce 0.2 any)
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-bookmark consult--source-file-register
+   consult--source-recent-file consult--source-project-recent-file
+   ;; :preview-key (kbd "M-.")
+   :preview-key '(:debounce 0.4 any))
+
+  ;; Optionally configure the narrowing key.
+  ;; Both < and C-+ work reasonably well.
+  (setq consult-narrow-key "<") ;; (kbd "C-+")
+
+  ;; Optionally make narrowing help available in the minibuffer.
+  ;; You may want to use `embark-prefix-help-command' or which-key instead.
+  ;; (define-key consult-narrow-map (vconcat consult-narrow-key "?") #'consult-narrow-help)
+
+  ;; By default `consult-project-function' uses `project-root' from project.el.
+  ;; Optionally configure a different project root function.
+  ;; There are multiple reasonable alternatives to chose from.
+  ;;;; 1. project.el (the default)
+  ;; (setq consult-project-function #'consult--default-project--function)
+  ;;;; 2. projectile.el (projectile-project-root)
+  (autoload 'projectile-project-root "projectile")
+  (setq consult-project-function (lambda (_) (projectile-project-root)))
+  ;;;; 3. vc.el (vc-root-dir)
+  ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
+  ;;;; 4. locate-dominating-file
+  ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
+)
+
+(use-package eglot
+  :straight t
+  :config 
+  (add-to-list 'eglot-server-programs '(c-mode . ("clangd")))
+  (add-to-list 'eglot-server-programs '(c++-mode . ("clangd"))))
 ;; reenable garbage collection
 (add-hook 'emacs-startup-hook
   (lambda () (setq gc-cons-threshold  33554432 ; 32mb

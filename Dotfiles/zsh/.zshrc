@@ -22,7 +22,10 @@ alias code="/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/co
 # cmake
 export PATH="/Applications/CMake.app/Contents/bin/:$PATH"
 
-# ninja
-export PATH="$HOME/Code/Config/Bin/Darwin/ninja/:$PATH"
+# ninja, clangd
+export PATH="$HOME/Code/Config/Bin/Darwin/:$PATH"
 
+# HACK: clang-format
+alias clang-format="$HOME/.vscode/extensions/ms-vscode.cpptools-1.13.9-darwin-x64/LLVM/bin/clang-format"
+alias clang-tidy="$HOME/.vscode/extensions/ms-vscode.cpptools-1.13.9-darwin-x64/LLVM/bin/clang-tidy"
 

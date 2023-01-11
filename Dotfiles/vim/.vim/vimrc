@@ -1,6 +1,9 @@
 set nocompatible
 
 syntax on
+colorscheme material
+let g:material_theme_style = 'ocean'
+
 
 set background=dark
 set tabstop=2
