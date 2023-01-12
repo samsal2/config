@@ -1,4 +1,4 @@
-PROMPT="%F{red}%n%f%F{blue}@%f%F{yellow}%m%f %F{green}%~%f%F{blue} %% %f"
+PROMPT="%F{green}[%f%F{red}%n%f%F{blue}@%f%F{yellow}%m%f%F{green}:%f%F{green}%~%f%F{green}]%f%F{green}$ %f"
 
 # use vi mode 
 bindkey -v
