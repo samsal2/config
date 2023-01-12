@@ -1,10 +1,4 @@
-PROMPT="%F{10}[%f%F{1}%n%f%F{6}@%f%F{3}%m%f %F{2}%~%f%F{10}]%f%F{6} %% %f"
-
-# ls alias
-alias ls="ls -lGa"
-
-# homebrew analylics
-export HOMEBREW_NO_ANALYTICS=1
+PROMPT="%F{red}%n%f%F{blue}@%f%F{yellow}%m%f %F{green}%~%f%F{blue} %% %f"
 
 # use vi mode 
 bindkey -v

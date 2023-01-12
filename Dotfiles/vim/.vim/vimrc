@@ -1,9 +1,7 @@
 set nocompatible
 
 syntax on
-colorscheme material
-let g:material_theme_style = 'ocean'
-
+colorscheme jellybeans
 
 set background=dark
 set tabstop=2
