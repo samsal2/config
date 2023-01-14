@@ -1,7 +1,8 @@
 set nocompatible
 
 syntax on
-colorscheme jellybeans
+
+" colorscheme acme
 
 set background=dark
 set tabstop=2
@@ -16,17 +17,5 @@ set noswapfile
 set encoding=utf-8 " displayed
 set fileencoding=utf-8 " written
 
-noremap <Up> <Nop>
-noremap <Down> <Nop>
-noremap <Left> <Nop>
-noremap <Right> <Nop>
-
-inoremap <Up> <Nop>
-inoremap <Down> <Nop>
-inoremap <Left> <Nop>
-inoremap <Right> <Nop>
-
-vnoremap <Up> <Nop>
-vnoremap <Down> <Nop>
-vnoremap <Left> <Nop>
-vnoremap <Right> <Nop>
+" let &t_ZH="\e[3m"
+" let &t_ZR="\e[23m"
