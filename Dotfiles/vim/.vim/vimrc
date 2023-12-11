@@ -1,12 +1,12 @@
 set nocompatible
 
 syntax on
-" color acme
+color solarized
 
 set background=dark
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
 set expandtab
 set incsearch
 set viminfo=""
@@ -15,9 +15,7 @@ set nowrap
 set noswapfile
 set encoding=utf-8 " displayed
 set fileencoding=utf-8 " written
-
-" https://stackoverflow.com/questions/1326998/enabling-italics-in-vim-syntax-highlighting-for-mac-terminal
-let &t_ZH="\e[3m"
-let &t_ZR="\e[23m"
+set autoindent
+set smartindent
 
 autocmd FileType make set noexpandtab

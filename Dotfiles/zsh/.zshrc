@@ -2,7 +2,7 @@
 bindkey -v
 
 # vulkan exports
-export VULKAN_SDK="$HOME/code/external/vulkan_sdk/1.3.236.0/macOS"
+export VULKAN_SDK="$HOME/code/external/vulkan_sdk/1.3.261.1/macOS"
 export PATH="$VULKAN_SDK/bin:$PATH"
 export DYLD_LIBRARY_PATH="$VULKAN_SDK/lib:$DYLD_LIBRARY_PATH"
 export VK_ICD_FILENAMES="$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json"
@@ -17,10 +17,10 @@ export PATH="/Applications/CMake.app/Contents/bin/:$PATH"
 # ninja, clangd
 export PATH="$HOME/code/config/bin/macos/universal:$PATH"
 
-# HACK: clang-format
-alias clang-format="$HOME/.vscode/extensions/ms-vscode.cpptools-1.14.5-darwin-x64/LLVM/bin/clang-format"
-alias clang-tidy="$HOME/.vscode/extensions/ms-vscode.cpptools-1.14.5-darwin-x64/LLVM/bin/clang-tidy"
+# ffmpeg
+export PATH="$HOME/code/external/ffmpeg/bin:$PATH"
 
-# zig
-export PATH="$HOME/code/external/zig:$PATH"
+# HACK: clang-format
+alias clang-format="$HOME/.vscode/extensions/ms-vscode.cpptools-1.18.5-darwin-x64/LLVM/bin/clang-format"
+alias clang-tidy="$HOME/.vscode/extensions/ms-vscode.cpptools-1.18.5-darwin-x64/LLVM/bin/clang-tidy"
 
