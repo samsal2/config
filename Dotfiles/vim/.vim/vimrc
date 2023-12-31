@@ -1,7 +1,7 @@
 set nocompatible
 
 syntax on
-color solarized
+color gruvbox
 
 set background=dark
 set tabstop=4
