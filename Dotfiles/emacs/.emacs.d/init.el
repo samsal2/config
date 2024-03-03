@@ -94,7 +94,7 @@
 (use-package projectile
   :straight t
   :diminish projectile-mode
-  :custom (projectile-project-search-path '("~/Code/"))
+  :custom (projectile-project-search-path '("~/code/"))
   :init (projectile-mode +1))
 
 (use-package vertico
@@ -247,6 +247,7 @@
   :config 
   (add-to-list 'eglot-server-programs '(c-mode . ("clangd")))
   (add-to-list 'eglot-server-programs '(c++-mode . ("clangd"))))
+
 ;; reenable garbage collection
 (add-hook 'emacs-startup-hook
   (lambda () (setq gc-cons-threshold  33554432 ; 32mb

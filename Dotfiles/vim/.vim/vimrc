@@ -1,7 +1,7 @@
 set nocompatible
 
 syntax on
-color gruvbox
+color acme
 
 set background=dark
 set tabstop=2
@@ -17,5 +17,6 @@ set encoding=utf-8 " displayed
 set fileencoding=utf-8 " written
 set autoindent
 set smartindent
+set laststatus=2
 
 autocmd FileType make set noexpandtab

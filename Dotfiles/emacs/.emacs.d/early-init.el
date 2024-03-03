@@ -49,7 +49,7 @@
 ;; (add-to-list 'initial-frame-alist `(internal-border-width . 3))
 
 ;; font
-(add-to-list 'initial-frame-alist `(font . "Fira Mono-14"))
+(add-to-list 'initial-frame-alist `(font . "JetBrains Mono NL-14"))
 
 ;; only display file
 (setq frame-title-format "%b")
