@@ -11,7 +11,6 @@ set expandtab
 set incsearch
 set viminfo=""
 set ruler
-set nowrap
 set noswapfile
 set encoding=utf-8 " displayed
 set fileencoding=utf-8 " written
