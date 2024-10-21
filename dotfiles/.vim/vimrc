@@ -1,7 +1,7 @@
 set nocompatible
 
 syntax on
-color acme
+" colorscheme molokai
 
 set background=dark
 set tabstop=2
