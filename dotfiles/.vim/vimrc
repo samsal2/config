@@ -1,7 +1,7 @@
 set nocompatible
 
 syntax on
-colorscheme acme
+colorscheme paramount
 
 set background=dark
 set tabstop=2
